@@ -198,9 +198,13 @@ static esp_zb_cluster_list_t *custom_temperature_sensor_clusters_create(esp_zb_t
   ESP_ERROR_CHECK(
     esp_zb_cluster_list_add_identify_cluster(cluster_list, esp_zb_zcl_attr_list_create(ESP_ZB_ZCL_CLUSTER_ID_IDENTIFY), ESP_ZB_ZCL_CLUSTER_CLIENT_ROLE)
   );
+  /*
   ESP_ERROR_CHECK(esp_zb_cluster_list_add_temperature_meas_cluster(
     cluster_list, esp_zb_temperature_meas_cluster_create(&(temperature_sensor->temp_meas_cfg)), ESP_ZB_ZCL_CLUSTER_SERVER_ROLE
   ));
+  */
+  ESP_ERROR_CHECK(esp_zb_cluster_list_add_ias_zone_cluster(esp_zb_cluster_list, esp_zb_smoke_cluster, ESP_ZB_ZCL_CLUSTER_SERVER_ROLE));
+
   return cluster_list;
 }
 
