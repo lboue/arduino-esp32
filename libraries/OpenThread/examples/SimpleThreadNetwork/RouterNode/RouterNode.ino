@@ -33,5 +33,7 @@ void setup() {
 void loop() {
   Serial.print("Thread Node State: ");
   Serial.println(otGetStringDeviceRole());
+  // Prints information about the current Thread network
+  otPrintNetworkInformation(Serial);
   delay(5000);
 }
