@@ -35,8 +35,9 @@ void loop() {
   Serial.println(otGetStringDeviceRole());
   // Prints information about the current Thread network
   // https://github.com/espressif/arduino-esp32/blob/master/libraries/OpenThread/helper_functions.md
-  Serial.print("Thread NetworkInformation: ");
+  Serial.println("Thread NetworkInformation: ");
+  Serial.println("---------------------------");
   otPrintNetworkInformation(Serial);
-  Serial.println();
+  Serial.println("---------------------------");
   delay(5000);
 }
