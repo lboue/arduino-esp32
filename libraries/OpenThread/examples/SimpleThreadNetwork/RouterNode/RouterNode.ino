@@ -65,11 +65,17 @@ void setup() {
 }
 
 void loop() {
+  char resp[256];
   if (otStatus) {
     Serial.println("Thread Network Information: ");
     Serial.println("---------------------------");
     otPrintNetworkInformation(Serial);
+    Serial.printf("---------------------------");
+
+    otRouterList &= otGetRespCmd("router list", resp);
+    Serial.printf("\r\nRouter list[using CLI]: %s\r", resp);
     Serial.println("---------------------------");
+
   } else {
     Serial.println("Some OpenThread operation has failed...");
   }
