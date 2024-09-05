@@ -25,6 +25,14 @@ const char *otGetStringDeviceRole() {
   return otRoleString[otGetDeviceRole()];
 }
 
+ot_device_role_t otGetPANID() {
+  char resp[512];
+  if (otGetRespCmd("panid", resp)) {
+    return resp;
+  }
+  else return -1;
+}
+
 bool otGetRespCmd(const char *cmd, char *resp, uint32_t respTimeout) {
   if (!OThreadCLI) {
     return false;
