@@ -30,6 +30,7 @@
 #include "ep/ZigbeeVibrationSensor.h"
 #include "ep/ZigbeeWindSpeedSensor.h"
 #include "ep/ZigbeeWindowCovering.h"
+#include "ep/ZigbeeMeterSensor.h"
 //// Other
 #include "ep/ZigbeeGateway.h"
 #include "ep/ZigbeeRangeExtender.h"
