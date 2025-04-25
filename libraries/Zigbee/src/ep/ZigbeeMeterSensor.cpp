@@ -11,7 +11,7 @@ esp_zb_cluster_list_t *esp_zb_electrical_meas_clusters_create(zigbee_meas_sensor
   esp_zb_cluster_list_add_basic_cluster(cluster_list, esp_zb_basic_cluster_create(basic_cfg), ESP_ZB_ZCL_CLUSTER_SERVER_ROLE);
   esp_zb_cluster_list_add_identify_cluster(cluster_list, esp_zb_identify_cluster_create(identify_cfg), ESP_ZB_ZCL_CLUSTER_SERVER_ROLE);
   // esp_zb_cluster_list_add_occupancy_sensing_cluster(cluster_list, esp_zb_occupancy_sensing_cluster_create(electrical_cfg), ESP_ZB_ZCL_CLUSTER_SERVER_ROLE);
-  esp_zb_cluster_list_add_electrical_meas_cluster(cluster_list, esp_zb_electrical_meas_cluster_create(elec_meas_cfg), ESP_ZB_ZCL_CLUSTER_SERVER_ROLE);
+  //esp_zb_cluster_list_add_electrical_meas_cluster(cluster_list, esp_zb_electrical_meas_cluster_create(elec_meas_cfg), ESP_ZB_ZCL_CLUSTER_SERVER_ROLE);
   return cluster_list;
 }
 
@@ -21,16 +21,37 @@ ZigbeeMeterSensor::ZigbeeMeterSensor(uint8_t endpoint) : ZigbeeEP(endpoint) {
   _device_id = ESP_ZB_HA_METER_INTERFACE_DEVICE_ID;
   _humidity_sensor = false;
 
+  uint32_t undefined_value;
+  undefined_value = 0x8000;
+
+  uint32_t hundred_value;
+  hundred_value = 100;
+
+  uint32_t one_value;
+  one_value = 1;
+
   //esp_zb_temperature_sensor_cfg_t temp_sensor_cfg = ESP_ZB_DEFAULT_TEMPERATURE_SENSOR_CONFIG();
   //_cluster_list = esp_zb_temperature_sensor_clusters_create(&temp_sensor_cfg);
 
   //esp_zb_on_off_switch_cfg_t switch_cfg = ESP_ZB_DEFAULT_ON_OFF_SWITCH_CONFIG();
 
+  // Electrical sensor config
   zigbee_meas_sensor_cfg_t electrical_cfg = ESP_ZB_DEFAULT_METER_SENSOR_CONFIG();
   _cluster_list = esp_zb_electrical_meas_clusters_create(&electrical_cfg);
   _ep_config = {
     .endpoint = _endpoint, .app_profile_id = ESP_ZB_AF_HA_PROFILE_ID, .app_device_id = ESP_ZB_HA_METER_INTERFACE_DEVICE_ID, .app_device_version = 0
   };
+
+  // Electrical attributes list
+  esp_zb_attribute_list_t *esp_zb_electrical_meas_cluster = esp_zb_zcl_attr_list_create(ESP_ZB_ZCL_CLUSTER_ID_ELECTRICAL_MEASUREMENT);
+
+  // DC Electrical attributes
+  esp_zb_electrical_meas_cluster_add_attr(esp_zb_electrical_meas_cluster, ESP_ZB_ZCL_ATTR_ELECTRICAL_MEASUREMENT_DC_CURRENT_ID, &undefined_value);
+  esp_zb_electrical_meas_cluster_add_attr(esp_zb_electrical_meas_cluster, ESP_ZB_ZCL_ATTR_ELECTRICAL_MEASUREMENT_DC_CURRENT_DIVISOR_ID, &hundred_value);
+  esp_zb_electrical_meas_cluster_add_attr(esp_zb_electrical_meas_cluster, ESP_ZB_ZCL_ATTR_ELECTRICAL_MEASUREMENT_DC_CURRENT_MULTIPLIER_ID, &one_value);
+
+  // Add Electrical cluster to cluster list
+  esp_zb_cluster_list_add_electrical_meas_cluster(_cluster_list, esp_zb_electrical_meas_cluster, ESP_ZB_ZCL_CLUSTER_SERVER_ROLE);
 }
 
 static int16_t zb_float_to_s16(float temp) {
