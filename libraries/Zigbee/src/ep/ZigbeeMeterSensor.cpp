@@ -27,7 +27,7 @@ ZigbeeMeterSensor::ZigbeeMeterSensor(uint8_t endpoint) : ZigbeeEP(endpoint) {
   //esp_zb_on_off_switch_cfg_t switch_cfg = ESP_ZB_DEFAULT_ON_OFF_SWITCH_CONFIG();
 
   zigbee_meas_sensor_cfg_t electrical_cfg = ESP_ZB_DEFAULT_METER_SENSOR_CONFIG();
-  //_cluster_list = esp_zb_electrical_meas_clusters_create(&electrical_cfg);
+  _cluster_list = esp_zb_electrical_meas_clusters_create(&electrical_cfg);
   _ep_config = {
     .endpoint = _endpoint, .app_profile_id = ESP_ZB_AF_HA_PROFILE_ID, .app_device_id = ESP_ZB_HA_METER_INTERFACE_DEVICE_ID, .app_device_version = 0
   };

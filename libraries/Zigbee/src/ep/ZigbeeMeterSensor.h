@@ -23,11 +23,18 @@
           },                                                                                      \
       .elec_meas_cfg =                                                                            \
           {                                                                                       \
-              .measured_value = ESP_ZB_ZCL_ATTR_ELECTRICAL_MEASUREMENT_DC_CURRENT_ID,               \
-              .min_value = ESP_ZB_ZCL_ATTR_ELECTRICAL_MEASUREMENT_DC_CURRENT_MIN_ID,                \
-              .max_value = ESP_ZB_ZCL_ATTR_ELECTRICAL_MEASUREMENT_DC_CURRENT_MAX_ID,                \
+              .measured_type = ESP_ZB_ZCL_ATTR_ELECTRICAL_MEASUREMENT_MEASUREMENT_TYPE_ID,        \
           },                                                                                      \
   }
+  // https://github.com/espressif/esp-zigbee-sdk/blob/ed1823a82f787f1ef9dc6494ca7334c52a0f8221/components/esp-zigbee-lib/include/zcl/esp_zigbee_zcl_electrical_meas.h#L154
+/*
+  .elec_meas_cfg =                                                                            \
+  {                                                                                       \
+      .measured_value = ESP_ZB_ZCL_ATTR_ELECTRICAL_MEASUREMENT_DC_CURRENT_ID,               \
+      .min_value = ESP_ZB_ZCL_ATTR_ELECTRICAL_MEASUREMENT_DC_CURRENT_MIN_ID,                \
+      .max_value = ESP_ZB_ZCL_ATTR_ELECTRICAL_MEASUREMENT_DC_CURRENT_MAX_ID,                \
+  },
+*/
 // clang-format on
 
 typedef struct zigbee_meas_sensor_cfg_s {
