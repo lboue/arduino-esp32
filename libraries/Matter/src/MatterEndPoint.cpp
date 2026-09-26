@@ -114,8 +114,7 @@ esp_matter::attribute_t *MatterEndPoint::getAttribute(uint32_t cluster_id, uint3
 bool MatterEndPoint::getAttributeVal(uint32_t cluster_id, uint32_t attribute_id, esp_matter_attr_val_t *attrVal) {
   esp_matter::attribute_t *attribute = getAttribute(cluster_id, attribute_id);
   if (attribute == nullptr) {
-    // Attribute doesn't exist; optionally log as verbose for debugging
-    log_v("GET_VAL: Attribute %" PRIu32 " not available for cluster %" PRIu32, attribute_id, cluster_id);
+    // Attribute not found (already logged in getAttribute)
     return false;
   }
   if (attribute::get_val(attribute, attrVal) == ESP_OK) {
