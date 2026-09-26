@@ -26,7 +26,7 @@ using namespace esp_matter::endpoint;
 using namespace chip::app::Clusters;
 
 namespace {
-constexpr int16_t DEFAULT_LOCAL_TEMPERATURE = 2000;
+constexpr int16_t DEFAULT_LOCAL_TEMPERATURE = 4500;
 constexpr int16_t DEFAULT_HEATING_SETPOINT = 4800;
 
 constexpr int16_t ABS_MIN_HEATING_SETPOINT = 2000;
@@ -97,11 +97,8 @@ bool MatterWaterHeater::begin() {
     return false;
   }
 
-  // Note: Optional attributes (TankVolume, TankPercentage, BoostState) cannot be dynamically added
-  // to the Water Heater Management cluster due to esp_matter endpoint generator limitations.
-  // The endpoint generator only supports mandatory attributes.
-  // Workaround: setters cache values locally when attributes don't exist in the data model.
-  // TODO: File issue with esp_matter to add feature support in endpoint generator.
+  // Note: Optional attributes (TankVolume, TankPercentage) are not created by the standard
+  // endpoint generator. Setters below cache values locally when attributes don't exist.
 
   setEndPointId(endpoint::get_id(endpoint));
   initialized = true;
