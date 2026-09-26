@@ -97,10 +97,11 @@ bool MatterWaterHeater::begin() {
     return false;
   }
 
-  // Note: Optional attributes (TankVolume, TankPercentage, BoostState) are not available
-  // in the standard Water Heater endpoint configuration. They would require custom
-  // modifications to the esp_matter endpoint generator to be included in the data model.
-  // The setters gracefully handle their absence by caching values locally.
+  // Note: Optional attributes (TankVolume, TankPercentage, BoostState) cannot be dynamically added
+  // to the Water Heater Management cluster due to esp_matter endpoint generator limitations.
+  // The endpoint generator only supports mandatory attributes.
+  // Workaround: setters cache values locally when attributes don't exist in the data model.
+  // TODO: File issue with esp_matter to add feature support in endpoint generator.
 
   setEndPointId(endpoint::get_id(endpoint));
   initialized = true;
