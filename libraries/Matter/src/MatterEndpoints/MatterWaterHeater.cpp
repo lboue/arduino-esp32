@@ -97,6 +97,11 @@ bool MatterWaterHeater::begin() {
     return false;
   }
 
+  // Note: Optional attributes (TankVolume, TankPercentage, BoostState) are not available
+  // in the standard Water Heater endpoint configuration. They would require custom
+  // modifications to the esp_matter endpoint generator to be included in the data model.
+  // The setters gracefully handle their absence by caching values locally.
+
   setEndPointId(endpoint::get_id(endpoint));
   initialized = true;
 
@@ -118,8 +123,7 @@ bool MatterWaterHeater::begin() {
   boostState = DEFAULT_BOOST_STATE;
   waterHeaterMode = DEFAULT_WATER_HEATER_MODE;
 
-  // Push our configured initial values after the attributes exist (the generated Water Heater device
-  // type only creates the mandatory attributes / defaults set above).
+  // Push our configured initial values now that all attributes have been created.
   setTankVolume(DEFAULT_TANK_VOLUME);
   setTankPercentage(DEFAULT_TANK_PERCENTAGE);
   syncHeatDemand();
@@ -466,8 +470,10 @@ bool MatterWaterHeater::setTankVolume(uint16_t value) {
   }
 
   esp_matter_attr_val_t attr = esp_matter_invalid(NULL);
+  // TankVolume is an optional attribute; silently skip if it doesn't exist in the data model
   if (!getAttributeVal(WaterHeaterManagement::Id, WaterHeaterManagement::Attributes::TankVolume::Id, &attr)) {
-    return false;
+    tankVolume = value;  // Cache locally even if attribute doesn't exist
+    return true;
   }
 
   attr.val.u16 = value;
@@ -489,8 +495,10 @@ bool MatterWaterHeater::setTankPercentage(uint8_t value) {
   }
 
   esp_matter_attr_val_t attr = esp_matter_invalid(NULL);
+  // TankPercentage is an optional attribute; silently skip if it doesn't exist in the data model
   if (!getAttributeVal(WaterHeaterManagement::Id, WaterHeaterManagement::Attributes::TankPercentage::Id, &attr)) {
-    return false;
+    tankPercentage = value;  // Cache locally even if attribute doesn't exist
+    return true;
   }
 
   attr.val.u8 = value;

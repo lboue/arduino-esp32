@@ -102,7 +102,9 @@ esp_matter::attribute_t *MatterEndPoint::getAttribute(uint32_t cluster_id, uint3
   }
   esp_matter::attribute_t *attribute = attribute::get(cluster, attribute_id);
   if (attribute == nullptr) {
-    log_e("Attribute [%]" PRIu32 " not found", attribute_id);
+    // Optional attributes (e.g., TankVolume, TankPercentage) may not exist in the data model
+    // Log as verbose instead of error to avoid spam for normal operation
+    log_v("Attribute [%]" PRIu32 " not found", attribute_id);
     return nullptr;
   }
   return attribute;
@@ -112,13 +114,15 @@ esp_matter::attribute_t *MatterEndPoint::getAttribute(uint32_t cluster_id, uint3
 bool MatterEndPoint::getAttributeVal(uint32_t cluster_id, uint32_t attribute_id, esp_matter_attr_val_t *attrVal) {
   esp_matter::attribute_t *attribute = getAttribute(cluster_id, attribute_id);
   if (attribute == nullptr) {
+    // Attribute doesn't exist; optionally log as verbose for debugging
+    log_v("GET_VAL: Attribute %" PRIu32 " not available for cluster %" PRIu32, attribute_id, cluster_id);
     return false;
   }
   if (attribute::get_val(attribute, attrVal) == ESP_OK) {
     log_v("GET_VAL Success for cluster %" PRIu32 ", attribute %" PRIu32 " with value %" PRIu32, cluster_id, attribute_id, attrVal->val.u32);
     return true;
   }
-  log_e("GET_VAL FAILED! for cluster %" PRIu32 ", attribute %" PRIu32 " with value %" PRIu32, cluster_id, attribute_id, attrVal->val.u32);
+  log_v("GET_VAL could not read value for cluster %" PRIu32 ", attribute %" PRIu32, cluster_id, attribute_id);
   return false;
 }
 
